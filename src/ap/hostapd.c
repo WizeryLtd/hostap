@@ -1469,3 +1469,32 @@ int hostapd_macaddr_acl_command(struct hostapd_data *hapd, char *cmd)
 	return ret;
 }
 
+struct hostapd_channel_data *hostapd_get_valid_channel(struct hostapd_data *hapd,
+						int req_freq)
+{
+	struct hostapd_hw_modes *mode;
+	struct hostapd_channel_data *chan;
+	int i, channel_idx = 0;
+
+	wpa_printf(MSG_DEBUG, "Selecting next channel");
+
+	if (hapd->iface->current_mode == NULL)
+		return NULL;
+
+	mode = hapd->iface->current_mode;
+
+	for (i = 0; i < mode->num_channels; i++) {
+		chan = &mode->channels[i];
+
+		if (chan->flag & (HOSTAPD_CHAN_DISABLED | HOSTAPD_CHAN_RADAR))
+			continue;
+		channel_idx++;
+
+		/* request specific channel */
+		if (req_freq && (req_freq == chan->freq))
+			return chan;
+	}
+
+	wpa_printf(MSG_WARNING, "Could't get requested channel");
+	return NULL;
+}

@@ -3104,6 +3104,11 @@ enum wpa_event_type {
 	EVENT_WNM,
 
 	EVENT_START_ROAMING,
+
+	/**
+	 * EVENT_REQ_CH_SW - a request to perform a channel switch for GO/AP
+	 */
+	EVENT_REQ_CH_SW
 };
 
 
@@ -3784,6 +3789,8 @@ static inline void drv_event_eapol_rx(void *ctx, const u8 *src, const u8 *data,
 
 /* driver_common.c */
 void wpa_scan_results_free(struct wpa_scan_results *res);
+int ieee802_11_start_channel_switch(struct hostapd_data *hapd,
+				    int freq, u8 radar_detected);
 
 /* Convert wpa_event_type to a string for logging */
 const char * event_to_string(enum wpa_event_type event);

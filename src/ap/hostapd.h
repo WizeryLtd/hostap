@@ -177,6 +177,8 @@ struct hostapd_data {
 	void (*setup_complete_cb)(void *ctx);
 	void *setup_complete_cb_ctx;
 
+	struct hostapd_channel_data *next_channel;
+
 #ifdef CONFIG_P2P
 	struct p2p_data *p2p;
 	struct p2p_group *p2p_group;
@@ -290,6 +292,9 @@ int hostapd_remove_iface(struct hapd_interfaces *ifaces, char *buf);
 void hostapd_macaddr_acl_accept_sta(struct hostapd_data *hapd);
 void hostapd_macaddr_acl_deny_sta(struct hostapd_data *hapd);
 int hostapd_macaddr_acl_command(struct hostapd_data *hapd, char *cmd);
+struct hostapd_channel_data *
+hostapd_get_valid_channel(struct hostapd_data *hapd,
+						int req_freq);
 
 /* utils.c */
 int hostapd_register_probereq_cb(struct hostapd_data *hapd,
