@@ -80,6 +80,8 @@ const char * event_to_string(enum wpa_event_type event)
 	E2S(CH_SWITCH);
 	E2S(WNM);
 	E2S(START_ROAMING);
+	E2S(ROAMING_ENABLED);
+	E2S(ROAMING_DISABLED);
 	}
 
 	return "UNKNOWN";
