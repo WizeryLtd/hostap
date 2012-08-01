@@ -3064,6 +3064,9 @@ static const struct global_parse_data global_fields[] = {
 	{ INT(p2p_no_group_iface), 0 },
 	{ INT(p2p_multi_chan), 0 },
 #endif /* CONFIG_P2P */
+#ifdef ANDROID_P2P
+	{ INT_RANGE(p2p_conc_mode, 0, 2), 0 },
+#endif
 	{ FUNC(country), CFG_CHANGED_COUNTRY },
 	{ INT(bss_max_count), 0 },
 	{ INT(bss_expiration_age), 0 },
