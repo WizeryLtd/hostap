@@ -3526,6 +3526,9 @@ static int p2p_ctrl_connect(struct wpa_supplicant *wpa_s, char *cmd,
 	int freq = 0;
 	int pd;
 	int ht40;
+#ifdef ANDROID_P2P
+	int no_p2p_conc;
+#endif
 
 	/* <addr> <"pbc" | "pin" | PIN> [label|display|keypad]
 	 * [persistent|persistent=<network id>]
@@ -3559,6 +3562,9 @@ static int p2p_ctrl_connect(struct wpa_supplicant *wpa_s, char *cmd,
 	automatic = os_strstr(pos, " auto") != NULL;
 	pd = os_strstr(pos, " provdisc") != NULL;
 	ht40 = (os_strstr(cmd, " ht40") != NULL) || wpa_s->conf->p2p_go_ht40;
+#ifdef ANDROID_P2P
+	no_p2p_conc = os_strstr(pos, " no_p2p_conc") != NULL;
+#endif
 
 	pos2 = os_strstr(pos, " go_intent=");
 	if (pos2) {
@@ -3597,16 +3603,18 @@ static int p2p_ctrl_connect(struct wpa_supplicant *wpa_s, char *cmd,
 	}
 
 #ifdef ANDROID_P2P
-	if (p2p_handle_concurrency_conflicts(wpa_s, &go_intent) != 0) {
-		wpa_printf(MSG_INFO, "P2P: Canceling p2p connect due to "
-			   "single channel concurrency conflicts.");
-		return -1;
-	}
+	if (!no_p2p_conc) {
+		if (p2p_handle_concurrency_conflicts(wpa_s, &go_intent) != 0) {
+			wpa_printf(MSG_INFO, "P2P: Canceling p2p connect due "
+				   "to single channel concurrency conflicts.");
+			return -1;
+		}
 
-	if (join && go_intent == 15) {
-		wpa_printf(MSG_INFO, "P2P: Canceling p2p join due to "
-			   "single channel concurrency conflicts.");
-		return -1;
+		if (join && go_intent == 15) {
+			wpa_printf(MSG_INFO, "P2P: Canceling p2p join due to "
+				   "single channel concurrency conflicts.");
+			return -1;
+		}
 	}
 #endif
 
