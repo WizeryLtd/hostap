@@ -12,6 +12,7 @@ PKG_CONFIG ?= pkg-config
 
 CFLAGS += -I../src
 CFLAGS += -I../src/utils
+CFLAGS += -DVERSION_STR_POSTFIX=\"-$(shell git describe)\"
 
 -include .config
 
