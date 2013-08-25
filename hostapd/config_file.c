@@ -2939,6 +2939,8 @@ static int hostapd_config_fill(struct hostapd_config *conf,
 
 			wpabuf_free(bss->vendor_elements);
 			bss->vendor_elements = elems;
+		} else if (os_strcmp(buf, "ap_channel_sync") == 0) {
+			conf->ap_channel_sync = atoi(pos);
 		} else {
 			wpa_printf(MSG_ERROR, "Line %d: unknown configuration "
 				   "item '%s'", line, buf);
