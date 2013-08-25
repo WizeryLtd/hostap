@@ -227,5 +227,12 @@ static inline int hostapd_drv_cancel_priority(struct hostapd_data *hapd)
 	return hapd->driver->cancel_priority(hapd->drv_priv);
 }
 
+static inline int hostapd_drv_shared_ap_freq(struct hostapd_data *hapd,
+					     struct wpa_channel_info *info)
+{
+	if (hapd->driver == NULL || hapd->driver->shared_ap_freq == NULL)
+		return -1;
+	return hapd->driver->shared_ap_freq(hapd->drv_priv, info);
+}
 
 #endif /* AP_DRV_OPS */
